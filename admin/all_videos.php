@@ -18,48 +18,54 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     body {
-        background-color: #f8f9fa;
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
     }
+
     .sidebar {
-        height: 100vh;
-        width: 250px;
-        background-color: #343a40;
-        padding: 30px 20px;
-        color: white;
+      background-color: #343a40;
+      padding: 30px 20px;
+      color: white;
+      height: 100vh;
     }
 
     .sidebar h4 {
-        font-weight: bold;
-        margin-bottom: 30px;
-        font-size: 22px;
-        text-align: center;
+      font-weight: bold;
+      margin-bottom: 30px;
+      font-size: 22px;
+      text-align: center;
     }
 
     .sidebar a {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #dee2e6;
-        text-decoration: none;
-        padding: 10px 12px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        transition: background 0.2s ease;
-        font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #dee2e6;
+      text-decoration: none;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      transition: background 0.2s ease;
+      font-size: 16px;
     }
 
     .sidebar a:hover {
-        background-color: #495057;
-        color: white;
+      background-color: #495057;
+      color: white;
     }
 
     .sidebar i {
-        font-size: 18px;
+      font-size: 18px;
     }
 
     .table thead {
-        background-color: #343a40;
-        color: white;
+      background-color: #343a40;
+      color: white;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: white;
     }
   </style>
 </head>
@@ -69,7 +75,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
   <div class="row">
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="col-md-3 col-lg-2 sidebar">
       <h4>Admin Panel</h4>
       <a href="dashboard_new.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
       <a href="dashboard.php"><i class="bi bi-camera-video"></i> Upload Video</a>
@@ -82,7 +88,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     <!-- Content -->
     <div class="col-md-9 col-lg-10 p-4">
       <h3 class="mb-4">Senarai Video Dimuat Naik</h3>
-      
+        <?php if (isset($_GET['message'])): ?>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php echo htmlspecialchars($_GET['message']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <?php endif; ?>
+
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
@@ -125,7 +137,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
   </div>
 </div>
 
-<footer class="bg-dark text-white text-center py-3 mt-4">
+<footer class="text-center py-3 mt-4">
   &copy; <?php echo date('Y'); ?> Lensa TigaD. All rights reserved.
 </footer>
 

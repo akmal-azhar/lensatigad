@@ -24,12 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sssi", $title, $description, $youtube_link, $video_id);
 
     if ($stmt->execute()) {
-        header("Location: all_videos.php?updated=true");
+        header("Location: all_videos.php?message=Video telah dikemaskini");
         exit;
-    } else {
-        echo "Ralat semasa mengemaskini video.";
     }
-}
+    else {
+          echo "Ralat semasa mengemaskini video.";
+        }
+    }
 
 // Dapatkan data sedia ada
 $stmt = $conn->prepare("SELECT * FROM videos WHERE id = ?");
