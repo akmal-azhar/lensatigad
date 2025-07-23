@@ -82,11 +82,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             <label for="category" class="form-label">Kategori</label>
             <select class="form-select" id="category" name="category" required>
               <option value="">-- Pilih Kategori --</option>
-              <option value="sukan">Sukan</option>
+              <option value="sports">Sukan</option>
               <option value="business">Business</option>
               <option value="education">Education</option>
               <option value="infotainment">Infotainment</option>
-              
             </select>
           </div>
 
@@ -100,12 +99,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             <textarea class="form-control" id="content" name="content" rows="8" placeholder="Isi penuh artikel..." required></textarea>
           </div>
 
-          <!-- Tambah selepas ruangan kandungan artikel -->
+          <!-- Thumbnail utama -->
           <div class="mb-3">
-            <label for="thumbnail" class="form-label">Thumbnail (Gambar)</label>
+            <label for="thumbnail" class="form-label">Thumbnail Utama</label>
             <input class="form-control" type="file" id="thumbnail" name="thumbnail" accept="image/*" required>
           </div>
 
+          <!-- Thumbnail kedua -->
           <div class="mb-3">
             <label for="thumbnail_secondary" class="form-label">Thumbnail Kedua</label>
             <input type="file" class="form-control" id="thumbnail_secondary" name="thumbnail_secondary" accept="image/*">

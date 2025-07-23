@@ -8,106 +8,168 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 $id = intval($_GET['id']);
+
+// Dapatkan artikel yang diminta
 $stmt = $conn->prepare("SELECT * FROM articles WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
-$result = $stmt->get_result();
+$article = $stmt->get_result()->fetch_assoc();
 
-if ($result->num_rows == 0) {
+if (!$article) {
     echo "Artikel tidak dijumpai.";
     exit;
 }
 
-$article = $result->fetch_assoc();
-$content = nl2br($article['content']);
+// Dapatkan gambar utama dan sekunder
+$stmtImg = $conn->prepare("SELECT * FROM article_images WHERE article_id = ?");
+$stmtImg->bind_param("i", $id);
+$stmtImg->execute();
+$images = $stmtImg->get_result();
 
-$thumbnail = !empty($article['thumbnail']) ? 'uploads/' . $article['thumbnail'] : 'images/default-thumbnail.jpg';
-$thumbnail_secondary = !empty($article['thumbnail_secondary']) ? 'uploads/' . $article['thumbnail_secondary'] : null;
+$primary = null;
+$secondary = null;
+while ($img = $images->fetch_assoc()) {
+    if ($img['type'] === 'primary') $primary = $img['image_path'];
+    if ($img['type'] === 'secondary') $secondary = $img['image_path'];
+}
+
+// Dapatkan 8 artikel terkini
+$latest = $conn->query("SELECT id, title FROM articles ORDER BY created_at DESC LIMIT 8");
 ?>
 
-<!DOCTYPE html>
-<html lang="ms">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><?php echo htmlspecialchars($article['title']); ?> - Lensa TigaD</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f9f9f9;
-    }
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: flex;
+    align-items: flex-start; /* Ini penting! */
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
 
-    .article-wrapper {
-      padding: 40px 20px;
-    }
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+.article-main {
+    width: 70%;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    border-radius: 8px;
+}
+.article-main h2 {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+.article-meta {
+    font-size: 0.9em;
+    color: #777;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+.article-main img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    margin: 25px 0;
+    border-radius: 5px;
+}
+.article-main p {
+    font-size: 1.1em;
+    text-align: justify;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
 
-    .article-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #333;
-    }
+.sidebar {
+    width: 30%;
+    align-self: flex-start; /* Boleh tambah sebagai backup */
+    margin-top: 200px; /* Ubah nilai ni ikut tinggi gambar */
+}
 
-    .article-meta {
-      color: #666;
-      font-size: 0.9rem;
-      margin-bottom: 15px;
-    }
+.sidebar h3 {
+    margin-top: 0;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar ul li {
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+.sidebar ul li a {
+    text-decoration: none;
+    color: #0066cc;
+    font-weight: 500;
+}
+.sidebar ul li a:hover {
+    color: #003366;
+}
+</style>
 
-    .article-image {
-      width: 100%;
-      max-width: 500px;
-      height: auto;
-      margin: 20px 0;
-      border-radius: 8px;
-    }
+<div class="container">
+    <!-- Artikel Utama -->
+    <div class="article-main">
+        <h2><?php echo htmlspecialchars($article['title']); ?></h2>
+        <div class="article-meta">
+            Kategori: <?php echo htmlspecialchars($article['category']); ?> |
+            Tarikh: <?php echo date("d M Y, h:i A", strtotime($article['created_at'])); ?>
+        </div>
 
-    .article-content {
-      font-size: 1.1rem;
-      line-height: 1.8;
-      color: #333;
-      max-width: 800px;
-    }
+        <?php if ($primary): ?>
+            <img src="uploads/<?php echo $primary; ?>" alt="Gambar utama">
+        <?php endif; ?>
 
-    .article-content p {
-      margin-bottom: 18px;
-      text-align: justify;
-    }
+        <?php
+        // Pecahkan content ikut perenggan
+        $paragraphs = explode("\n", trim($article['content']));
+        $paraCount = 0;
 
-    .btn-back {
-      margin-bottom: 20px;
-    }
-  </style>
-</head>
-<body>
+        foreach ($paragraphs as $para) {
+            if (!empty(trim($para))) {
+                echo "<p>" . nl2br(htmlspecialchars($para)) . "</p>";
+                $paraCount++;
 
-<div class="article-wrapper">
-  <a href="article.php" class="btn btn-outline-secondary btn-sm btn-back">&larr; Kembali</a>
+                // Masukkan gambar sekunder selepas perenggan ke-3 jika ada
+                if ($paraCount == 3 && $secondary) {
+                    echo "<img src='uploads/$secondary' alt='Gambar tambahan'>";
+                }
+            }
+        }
+        ?>
+    </div>
 
-  <h1 class="article-title"><?php echo htmlspecialchars($article['title']); ?></h1>
-  <div class="article-meta">
-    Kategori: <?php echo ucfirst($article['category']); ?> | Diterbitkan: <?php echo date('d M Y', strtotime($article['created_at'])); ?>
-  </div>
-
-  <img src="<?php echo htmlspecialchars($thumbnail); ?>" class="article-image" alt="Thumbnail Utama">
-
-  <div class="article-content">
-    <?php
-    $paragraphs = explode("\n", strip_tags($article['content']));
-    foreach ($paragraphs as $index => $para) {
-      if (trim($para) === '') continue;
-      echo '<p>' . htmlspecialchars($para) . '</p>';
-
-      if ($index == 2 && $thumbnail_secondary) {
-        echo '<img src="' . htmlspecialchars($thumbnail_secondary) . '" class="article-image" alt="Thumbnail Sekunder">';
-      } elseif ($index == 5) {
-        echo '<img src="' . htmlspecialchars($thumbnail) . '" class="article-image" alt="Thumbnail">';
-      }
-    }
-    ?>
-  </div>
+    <!-- Artikel Terkini -->
+    <div class="sidebar">
+        <h3>Artikel Terkini</h3>
+        <ul>
+            <?php while ($row = $latest->fetch_assoc()): ?>
+                <li>
+                    <a href="view_article.php?id=<?php echo $row['id']; ?>">
+                        <?php echo htmlspecialchars($row['title']); ?>
+                    </a>
+                </li>
+            <?php endwhile; ?>
+        </ul>
+    </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
-</body>
-</html>

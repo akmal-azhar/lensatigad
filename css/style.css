@@ -1,9 +1,9 @@
 /* Global Reset */
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   background-color: #ffffff;
-  color: #222222;
+  color: black;
 }
 
 /* Header */
@@ -82,7 +82,7 @@ body {
 /* Footer */
 .site-footer {
   background-color: #f1f1f1;
-  color: #333;
+  color: black;
   text-align: center;
   padding: 20px 0;
   font-size: 14px;

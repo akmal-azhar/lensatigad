@@ -1,62 +1,60 @@
 <?php
-session_start();
 require '../includes/db.php';
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
-    echo "Akses tidak sah.";
-    exit;
-}
-
+// Semak jika borang dihantar
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title']);
-    $content = trim($_POST['content']);
     $category = trim($_POST['category']);
+    $content = trim($_POST['content']);
 
-    // Thumbnail utama
-    $thumbnail_name = '';
-    if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
-        $thumbnail_tmp = $_FILES['thumbnail']['tmp_name'];
-        $thumbnail_name = time() . '_' . basename($_FILES['thumbnail']['name']);
-        $upload_path = '../uploads/' . $thumbnail_name;
+    // Upload gambar utama
+    $thumbnail = $_FILES['thumbnail'];
+    $thumbnail_secondary = $_FILES['thumbnail_secondary'];
 
-        if (!is_dir('../uploads')) {
-            mkdir('../uploads', 0777, true);
-        }
+    $uploadDir = '../uploads/';
+    $thumbnailName = null;
+    $thumbnailSecondaryName = null;
 
-        move_uploaded_file($thumbnail_tmp, $upload_path);
+    // Simpan thumbnail utama jika ada
+    if ($thumbnail['error'] === 0) {
+        $thumbnailName = time() . '_' . basename($thumbnail['name']);
+        move_uploaded_file($thumbnail['tmp_name'], $uploadDir . $thumbnailName);
     }
 
-    // Thumbnail kedua
-    $thumbnail_secondary_name = '';
-    if (isset($_FILES['thumbnail_secondary']) && $_FILES['thumbnail_secondary']['error'] === UPLOAD_ERR_OK) {
-        $thumb2_tmp = $_FILES['thumbnail_secondary']['tmp_name'];
-        $thumbnail_secondary_name = time() . '_2_' . basename($_FILES['thumbnail_secondary']['name']);
-        $upload_path2 = '../uploads/' . $thumbnail_secondary_name;
-
-        if (!is_dir('../uploads')) {
-            mkdir('../uploads', 0777, true);
-        }
-
-        move_uploaded_file($thumb2_tmp, $upload_path2);
+    // Simpan thumbnail sekunder jika ada
+    if ($thumbnail_secondary['error'] === 0) {
+        $thumbnailSecondaryName = time() . '_s_' . basename($thumbnail_secondary['name']);
+        move_uploaded_file($thumbnail_secondary['tmp_name'], $uploadDir . $thumbnailSecondaryName);
     }
 
-    if (!empty($title) && !empty($content) && !empty($category)) {
-        $stmt = $conn->prepare("INSERT INTO articles (title, content, category, thumbnail, thumbnail_secondary, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
-        $stmt->bind_param("sssss", $title, $content, $category, $thumbnail_name, $thumbnail_secondary_name);
+    // Masukkan ke dalam table articles
+    $stmt = $conn->prepare("INSERT INTO articles (title, category, content, created_at) VALUES (?, ?, ?, NOW())");
+    $stmt->bind_param("sss", $title, $category, $content);
+    
+    if ($stmt->execute()) {
+        $article_id = $conn->insert_id;
 
-        if ($stmt->execute()) {
-            echo "<div style='padding: 20px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px;'>
-                    Artikel berjaya dimuat naik!
-                  </div><br>";
-            echo "<a href='add_article.php'>Kembali ke Upload Article</a> | <a href='articles.php'>Lihat Semua Artikel</a>";
-            exit;
-        } else {
-            echo "<div style='color: red;'>Ralat semasa simpan artikel.</div>";
+        // Masukkan gambar utama jika ada
+        if ($thumbnailName) {
+            $stmtImg = $conn->prepare("INSERT INTO article_images (article_id, image_path, type) VALUES (?, ?, 'primary')");
+            $path = $thumbnailName;
+            $stmtImg->bind_param("is", $article_id, $path);
+            $stmtImg->execute();
         }
+
+        // Masukkan gambar sekunder jika ada
+        if ($thumbnailSecondaryName) {
+            $stmtImg2 = $conn->prepare("INSERT INTO article_images (article_id, image_path, type) VALUES (?, ?, 'secondary')");
+            $path2 = $thumbnailSecondaryName;
+            $stmtImg2->bind_param("is", $article_id, $path2);
+            $stmtImg2->execute();
+        }
+
+        echo "<script>alert('Artikel berjaya dimasukkan!'); window.location.href = 'dashboard.php';</script>";
     } else {
-        echo "<div style='color: red;'>Sila isi semua ruangan.</div>";
+        echo "Ralat: " . $stmt->error;
     }
 } else {
-    echo "<div style='color: red;'>Akses tidak sah.</div>";
+    echo "Akses tidak sah.";
 }
 ?>
