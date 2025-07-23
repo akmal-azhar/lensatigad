@@ -176,7 +176,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client') {
                 <?php echo nl2br(htmlspecialchars($row['comment'])); ?>
             </p>
 
-            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') : ?>
                 <form action="admin/delete_comment.php" method="get" onsubmit="return confirm('Padam komen ini?');" style="display:inline;">
                     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                     <input type="hidden" name="video_id" value="<?php echo $video_id; ?>">
