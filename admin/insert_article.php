@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtImg2->execute();
         }
 
-        echo "<script>alert('Artikel berjaya dimasukkan!'); window.location.href = 'dashboard.php';</script>";
+        echo "<script>alert('Artikel berjaya dimasukkan!'); window.location.href = 'dashboard_new.php';</script>";
     } else {
         echo "Ralat: " . $stmt->error;
     }

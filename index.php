@@ -13,6 +13,9 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lensa TigaD - Home</title>
 
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <!-- AOS CSS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -20,15 +23,13 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3
     body {
       font-family: 'Segoe UI', sans-serif;
       line-height: 1.6;
-      margin: 0;
-      padding: 0;
-      background: #fff;
-      color: #000;
+      background-color: #ffffff;
+      color: #111;
     }
 
     .hero {
-      background: #000;
-      color: #fff;
+      background: linear-gradient(to right, #e3f2fd, #bbdefb);
+      color: #0d47a1;
       padding: 100px 20px;
       display: flex;
       justify-content: flex-start;
@@ -37,38 +38,34 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3
     }
 
     .banner {
+      background-color: #f1f9ff;
+      padding: 40px 20px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
-      padding: 40px 20px;
-      background: #111;
+      gap: 30px;
     }
 
     .banner div {
-      flex: 1 1 220px;
-      max-width: 260px;
-      background: #000;
-      color: #fff;
+      background: #ffffff;
+      color: #111;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 280px;
       text-align: center;
     }
 
     .intro {
-      padding: 40px 20px;
+      padding: 60px 20px;
       text-align: center;
-      background: #fff;
-      color: #000;
+      background: #e3f2fd;
+      color: #111;
     }
 
     .video-section {
-      padding: 40px 20px;
-      background: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
+      padding: 50px 20px;
+      background: #ffffff;
     }
 
     .video-box {
@@ -76,41 +73,33 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3
       flex-direction: row;
       align-items: center;
       gap: 20px;
-      background: #fff;
+      background: #f8f9fa;
       padding: 20px;
-      border: 1px solid #ccc;
       border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
     }
 
     .video-box iframe {
       width: 300px;
       height: 170px;
+      border-radius: 8px;
+      border: none;
     }
 
-    .video-box .description {
-      flex: 1;
-      color: #000;
-    }
-
-    a {
-      color: #000;
+    .video-box .description h4 a {
+      color: #0d6efd;
       text-decoration: none;
     }
 
-    a:hover {
+    .video-box .description h4 a:hover {
       text-decoration: underline;
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
       .hero {
         flex-direction: column;
         text-align: center;
-        padding: 80px 15px;
-      }
-
-      .hero-text {
-        max-width: 100%;
       }
 
       .banner {
@@ -120,6 +109,7 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3
 
       .video-box {
         flex-direction: column;
+        text-align: center;
       }
 
       .video-box iframe {
@@ -134,43 +124,43 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3
   <!-- HERO -->
   <div class="hero" data-aos="fade-left">
     <div class="hero-text">
-      <h1>Welcome to Lensa TigaD 🎥</h1>
-      <p>Your trusted platform that brings together Sports, Business, Education, and Infotainment — offering a comprehensive space to discover, gain knowledge, and experience quality content all in one place.</p>
+      <h1 class="display-5 fw-bold">Welcome to Lensa TigaD 🎥</h1>
+      <p class="lead">Your trusted platform for Sports, Business, Education, and Infotainment — discover knowledge, ideas, and experience it all in one place.</p>
     </div>
   </div>
 
   <!-- BANNER SECTION -->
   <div class="banner">
-    <div data-aos="fade-left" data-aos-delay="200">
-      <h3>Sports</h3>
-      <p>Engaging video content covering both local and international sports, offering insights, highlights, and updates for enthusiasts and casual viewers alike.</p>
+    <div data-aos="fade-up" data-aos-delay="100">
+      <h4 class="text-primary fw-semibold">Sports</h4>
+      <p>Engaging local & global sports highlights, analysis, and updates for all fans.</p>
     </div>
-    <div data-aos="fade-left" data-aos-delay="400">
-      <h3>Business</h3>
-      <p>Content that dives into market trends, financial tips, and real-world business advice to help sharpen your entrepreneurial mind.</p>
+    <div data-aos="fade-up" data-aos-delay="200">
+      <h4 class="text-primary fw-semibold">Business</h4>
+      <p>Market trends, financial tips, and expert insights to sharpen your entrepreneurial mind.</p>
     </div>
-    <div data-aos="fade-left" data-aos-delay="600">
-      <h3>Education</h3>
-      <p>Educational videos and knowledge-sharing content from a wide range of fields, designed to inspire learning and promote continuous personal development.</p>
+    <div data-aos="fade-up" data-aos-delay="300">
+      <h4 class="text-primary fw-semibold">Education</h4>
+      <p>Educational content across various fields to boost your knowledge and growth.</p>
     </div>
-    <div data-aos="fade-left" data-aos-delay="800">
-      <h3>Infotainment</h3>
-      <p>Enjoy a variety of entertainment shows, podcasts, and much more — carefully curated to keep you informed, entertained, and connected with the latest trends.</p>
+    <div data-aos="fade-up" data-aos-delay="400">
+      <h4 class="text-primary fw-semibold">Infotainment</h4>
+      <p>Fun and informative shows, podcasts, and more to keep you connected & entertained.</p>
     </div>
   </div>
 
   <!-- INTRO -->
   <div class="intro" data-aos="fade-up">
-    <h2>What is Lensa TigaD?</h2>
-    <p>Lensa TigaD is a video platform that showcases a wide range of topics and podcast episodes for your viewing pleasure. Join our growing community today and stay connected with informative, inspiring, and entertaining content tailored just for you.</p>
+    <h2 class="fw-bold text-primary">What is Lensa TigaD?</h2>
+    <p class="mt-3">Lensa TigaD is a platform where videos and podcast episodes from various topics are showcased. Join our growing community and explore informative, inspiring, and entertaining content made just for you.</p>
   </div>
 
   <!-- LATEST VIDEOS -->
-  <div class="video-section">
-    <h2 data-aos="fade-up">🎬 3 Latest Video</h2>
+  <div class="video-section container">
+    <h2 class="mb-4 text-center fw-bold text-primary" data-aos="fade-up">🎬 3 Latest Videos</h2>
     <?php while ($video = $allVideos->fetch_assoc()): ?>
       <div class="video-box" data-aos="fade-up">
-        <iframe src="<?= htmlspecialchars($video['youtube_link']) ?>" frameborder="0" allowfullscreen></iframe>
+        <iframe src="<?= htmlspecialchars($video['youtube_link']) ?>" allowfullscreen></iframe>
         <div class="description">
           <h4><a href="video.php?id=<?= $video['id'] ?>"><?= htmlspecialchars($video['title']) ?></a></h4>
           <p><?= htmlspecialchars($video['description']) ?></p>
@@ -186,7 +176,7 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3
   <script>
     AOS.init({
       duration: 1000,
-      once: false // animasi akan dimainkan setiap kali scroll up/down
+      once: false
     });
   </script>
 </body>

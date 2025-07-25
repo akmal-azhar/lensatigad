@@ -1,0 +1,18 @@
+{
+    "name": "user/lensatigad",
+    "autoload": {
+        "psr-4": {
+            "User\\Lensatigad\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "akmal-azhar",
+            "email": "akmalazharwork@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "google/apiclient": "2.0"
+    }
+}

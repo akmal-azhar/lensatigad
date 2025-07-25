@@ -37,23 +37,169 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'type' => $type
         ];
 
-        header("Location: index.php");
+            header("Location: login_client.php?registered=1");
         exit;
     }
 }
 ?>
 
-<h2>Daftar Akaun Client</h2>
-<form method="post">
-    <input type="text" name="name" placeholder="Nama" required><br>
-    <input type="email" name="email" placeholder="Email" required><br>
-    <input type="password" name="password" placeholder="Kata laluan" required><br>
-    <input type="password" name="confirm" placeholder="Sahkan kata laluan" required><br>
-    <button type="submit">Daftar</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daftar Client</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e9efff, #f9f9f9);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-<?php if (!empty($errors)): ?>
-    <ul style="color: red;">
-        <?php foreach ($errors as $e) echo "<li>$e</li>"; ?>
-    </ul>
-<?php endif; ?>
+        .register-box {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h3 {
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-weight: 600;
+            background-color: #4a69bd;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #3b54a0;
+        }
+
+        .link-login {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .link-login a {
+            text-decoration: none;
+            color: #4a69bd;
+        }
+
+        .link-login a:hover {
+            text-decoration: underline;
+        }
+
+        .input-group-text {
+            background-color: #e9ecef;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-box">
+    <h3><i class="bi bi-person-plus-fill"></i> Sign Up as Client</h3>
+
+    <?php if (!empty($errors)): ?>
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                <?php foreach ($errors as $e): ?>
+                    <li><?= $e ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
+    <form method="POST" onsubmit="return validateForm()">
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Username" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Minimum 6 characters" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Confirm Password</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input type="password" name="confirm" id="confirm" class="form-control" placeholder="Confirm Password" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle-fill"></i> Sign Up</button>
+    </form>
+
+    <div class="link-login">
+        <p>Already have an account? <a href="login_client.php"><i class="bi bi-box-arrow-in-right"></i> Log In Here</a></p>
+    </div>
+</div>
+
+<script>
+function validateForm() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirm = document.getElementById("confirm").value;
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email.");
+        return false;
+    }
+
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return false;
+    }
+
+    if (password !== confirm) {
+        alert("Password and verification do not match.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>

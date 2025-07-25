@@ -105,7 +105,7 @@ h2.section-title {
 </style>
 
 <div class="category-container">
-    <h2 class="section-title">Kategori: <?= ucfirst(htmlspecialchars($kategori)) ?></h2>
+    <h2 class="section-title">Category: <?= ucfirst(htmlspecialchars($kategori)) ?></h2>
 
     <?php if ($result->num_rows > 0): ?>
         <?php while($row = $result->fetch_assoc()): ?>

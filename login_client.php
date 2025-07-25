@@ -1,6 +1,11 @@
 <?php
 session_start();
-include 'includes/db.php';
+require 'includes/db.php';
+
+$success = '';
+if (isset($_GET['registered']) && $_GET['registered'] == '1') {
+    $success = "Registration successful. Please log in.";
+}
 
 $error = '';
 
@@ -19,122 +24,147 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: index.php");
             exit;
         } else {
-            $error = "Kata laluan salah.";
+            $error = "Wrong password.";
         }
     } else {
-        $error = "Akaun tidak dijumpai atau bukan client.";
+        $error = "Account not found or not a client.";
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="ms">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Login Client - Lensa TigaD</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Masuk Client</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e9efff, #f9f9f9);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-  <!-- Google Fonts & Style -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
+        .login-box {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            animation: fadeIn 1s ease-in-out;
+        }
 
-    body {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      animation: fadeIn 1s ease;
-    }
+        h3 {
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
 
-    .login-card {
-      background-color: rgba(0, 0, 0, 0.75);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
-      width: 100%;
-      max-width: 400px;
-      animation: slideIn 0.7s ease;
-    }
+        .form-label {
+            font-weight: 500;
+        }
 
-    .login-card h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #00ffc8;
-    }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-weight: 600;
+            background-color: #4a69bd;
+            border: none;
+        }
 
-    .login-card input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      background-color: #f4f4f4;
-      color: #333;
-    }
+        .btn-primary:hover {
+            background-color: #3b54a0;
+        }
 
-    .login-card button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      background-color: #00ffc8;
-      color: black;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+        .link-register {
+            text-align: center;
+            margin-top: 15px;
+        }
 
-    .login-card button:hover {
-      background-color: #00c4a7;
-    }
+        .link-register a {
+            text-decoration: none;
+            color: #4a69bd;
+        }
 
-    .error {
-      color: #ff6b6b;
-      text-align: center;
-      margin-bottom: 15px;
-    }
+        .link-register a:hover {
+            text-decoration: underline;
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+        .input-group-text {
+            background-color: #e9ecef;
+        }
 
-    @keyframes slideIn {
-      from {
-        transform: translateY(40px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-  </style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="login-card">
-    <h2>Log Masuk Client</h2>
+<div class="login-box">
+    <h3><i class="bi bi-box-arrow-in-right"></i> Log in as User</h3>
 
     <?php if ($error): ?>
-      <div class="error"><?= $error ?></div>
+        <div class="alert alert-danger"><?= $error ?></div>
     <?php endif; ?>
 
-    <form method="post">
-      <input type="email" name="email" placeholder="Email" required>
-      <input type="password" name="password" placeholder="Kata laluan" required>
-      <button type="submit">Log Masuk</button>
+    <?php if ($success): ?>
+        <div class="alert alert-success text-center"><?= $success ?></div>
+    <?php endif; ?>
+
+    <form method="POST" onsubmit="return validateForm()">
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Minimum 6 characters" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary"><i class="bi bi-box-arrow-in-right"></i> Log In</button>
     </form>
-  </div>
+
+    <div class="link-register">
+        <p>Don't have account? <a href="register_client.php"><i class="bi bi-person-plus-fill"></i> Register Here</a></p>
+    </div>
+</div>
+
+<script>
+function validateForm() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email.");
+        return false;
+    }
+
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return false;
+    }
+
+    return true;
+}
+</script>
 
 </body>
 </html>

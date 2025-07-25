@@ -8,78 +8,122 @@
   <title>Artikel - Lensa TigaD</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/article.css">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
 
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f5f5f5;
+      background-color: #f8f9fa;
     }
+
     .articles-section {
-      max-width: 1000px;
-      margin: 50px 0 50px 50px;
-      padding: 0 15px;
-      text-align: left;
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 20px;
     }
+
     .category-heading {
-      border-left: 5px solid black;
-      padding-left: 10px;
-      font-size: 1.4rem;
+      border-left: 6px solid #4a69bd;
+      padding-left: 15px;
+      font-size: 1.5rem;
       font-weight: 600;
-      margin-top: 50px;
-      margin-bottom: 25px;
+      margin-top: 60px;
+      margin-bottom: 30px;
+      color: #333;
     }
+
     .article-card {
       display: flex;
-      gap: 15px;
-      margin-bottom: 25px;
-      background: #fff;
-      border-radius: 12px;
+      gap: 18px;
+      margin-bottom: 30px;
+      background: #ffffff;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
       align-items: flex-start;
+      transition: transform 0.2s;
     }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+    }
+
     .article-thumbnail {
-      width: 300px;
+      width: 280px;
       height: 180px;
-      object-fit: contain;
+      object-fit: cover;
       object-position: center;
       background-color: #fff;
       flex-shrink: 0;
-      border: 1px solid #ddd;
+      border-right: 1px solid #eee;
     }
+
     .article-body {
-      padding: 15px 10px 15px 0;
+      padding: 15px 20px 15px 0;
       flex: 1;
     }
+
     .card-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 5px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
     }
+
+    .card-title:hover {
+      color: #4a69bd;
+    }
+
     .card-text {
-      font-size: 0.95rem;
-      color: #444;
-      font-weight: bold;
+      font-size: 1rem;
+      color: #555;
     }
+
     .publish-date {
       font-size: 0.85rem;
-      color: #777;
+      color: #999;
+      margin-top: 10px;
     }
+
+    .btn-primary {
+      background-color: #4a69bd;
+      border-color: #4a69bd;
+    }
+
+    .btn-primary:hover {
+      background-color: #3756a3;
+      border-color: #3756a3;
+    }
+
     .view-all-btn {
       display: inline-block;
-      margin-top: 10px;
-      margin-bottom: 40px;
+      margin-top: 5px;
+      margin-bottom: 50px;
+      color: #4a69bd;
+      border-color: #4a69bd;
+    }
+
+    .view-all-btn:hover {
+      background-color: #4a69bd;
+      color: white;
+    }
+
+    h2.section-title {
+      font-weight: bold;
+      color: #333;
+      border-bottom: 3px solid #4a69bd;
+      display: inline-block;
+      padding-bottom: 5px;
+      margin-bottom: 30px;
     }
   </style>
 </head>
 <body>
 
 <section class="articles-section">
-  <h2 class="mb-4" style="font-weight: bold;">📘 List Article</h2>
+  <h2 class="section-title">📘 List Article</h2>
 
   <?php
-  // List kategori ikut nama sebenar dalam DB
   $kategori_list = [
     'sports' => 'Sports',
     'business' => 'Business',
@@ -94,25 +138,27 @@
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-      echo '<div class="category-heading">' . htmlspecialchars($label) . '</div>';
+      echo '<div class="category-heading" data-aos="fade-right" data-aos-once="false">' . htmlspecialchars($label) . '</div>';
 
+      $i = 0;
       while ($row = $result->fetch_assoc()) {
         $preview = substr(strip_tags($row['content']), 0, 200);
         if (strlen($row['content']) > 200) $preview .= '...';
         $img = !empty($row['thumbnail']) ? 'uploads/' . $row['thumbnail'] : 'images/default-thumbnail.jpg';
 
-        echo '<div class="article-card">';
+        echo '<div class="article-card" data-aos="fade-up" data-aos-delay="' . ($i * 100) . '" data-aos-once="false">';
         echo '<img src="' . htmlspecialchars($img) . '" class="article-thumbnail" alt="Thumbnail">';
         echo '<div class="article-body">';
         echo '<div class="card-title">' . htmlspecialchars($row['title']) . '</div>';
         echo '<div class="card-text">' . nl2br(htmlspecialchars($preview)) . '</div>';
-        echo '<div class="publish-date mt-2">📅 ' . date("d M Y, h:i A", strtotime($row['created_at'])) . '</div>';
+        echo '<div class="publish-date">📅 ' . date("d M Y, h:i A", strtotime($row['created_at'])) . '</div>';
         echo '<a href="view_article.php?id=' . $row['id'] . '" class="btn btn-sm btn-primary mt-2">Read More</a>';
         echo '</div>';
         echo '</div>';
+        $i++;
       }
 
-      echo '<a href="category.php?type=' . $kategori . '" class="btn btn-outline-secondary view-all-btn">View All ' . htmlspecialchars($label) . '</a>';
+      echo '<a href="category.php?type=' . $kategori . '" class="btn btn-outline-primary view-all-btn" data-aos="fade-up" data-aos-once="false">View All ' . htmlspecialchars($label) . '</a>';
     }
 
     $stmt->close();
@@ -121,5 +167,16 @@
 </section>
 
 <?php include 'includes/footer.php'; ?>
+
+<!-- JS AOS -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+    once: false, // allow repeat on scroll
+    duration: 600,
+    easing: 'ease-in-out',
+  });
+</script>
+
 </body>
 </html>

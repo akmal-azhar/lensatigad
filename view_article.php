@@ -9,7 +9,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-// Dapatkan artikel yang diminta
+// Dapatkan artikel
 $stmt = $conn->prepare("SELECT * FROM articles WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
@@ -20,7 +20,7 @@ if (!$article) {
     exit;
 }
 
-// Dapatkan gambar utama dan sekunder
+// Gambar
 $stmtImg = $conn->prepare("SELECT * FROM article_images WHERE article_id = ?");
 $stmtImg->bind_param("i", $id);
 $stmtImg->execute();
@@ -33,7 +33,7 @@ while ($img = $images->fetch_assoc()) {
     if ($img['type'] === 'secondary') $secondary = $img['image_path'];
 }
 
-// Dapatkan 8 artikel terkini
+// Artikel terkini
 $latest = $conn->query("SELECT id, title FROM articles ORDER BY created_at DESC LIMIT 8");
 ?>
 
@@ -44,15 +44,6 @@ body {
     margin: 0;
     padding: 0;
 }
-.container {
-    display: flex;
-    align-items: flex-start; /* Ini penting! */
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-    gap: 30px;
-}
-
 .container {
     display: flex;
     max-width: 1200px;
@@ -94,8 +85,10 @@ body {
 
 .sidebar {
     width: 30%;
-    align-self: flex-start; /* Boleh tambah sebagai backup */
-    margin-top: 200px; /* Ubah nilai ni ikut tinggi gambar */
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.08);
 }
 
 .sidebar h3 {
@@ -128,18 +121,17 @@ body {
 <div class="container">
     <!-- Artikel Utama -->
     <div class="article-main">
-        <h2><?php echo htmlspecialchars($article['title']); ?></h2>
+        <h2><?= htmlspecialchars($article['title']); ?></h2>
         <div class="article-meta">
-            Kategori: <?php echo htmlspecialchars($article['category']); ?> |
-            Tarikh: <?php echo date("d M Y, h:i A", strtotime($article['created_at'])); ?>
+            Kategori: <?= htmlspecialchars($article['category']); ?> |
+            Tarikh: <?= date("d M Y, h:i A", strtotime($article['created_at'])); ?>
         </div>
 
         <?php if ($primary): ?>
-            <img src="uploads/<?php echo $primary; ?>" alt="Gambar utama">
+            <img src="uploads/<?= $primary ?>" alt="Gambar utama">
         <?php endif; ?>
 
         <?php
-        // Pecahkan content ikut perenggan
         $paragraphs = explode("\n", trim($article['content']));
         $paraCount = 0;
 
@@ -148,7 +140,6 @@ body {
                 echo "<p>" . nl2br(htmlspecialchars($para)) . "</p>";
                 $paraCount++;
 
-                // Masukkan gambar sekunder selepas perenggan ke-3 jika ada
                 if ($paraCount == 3 && $secondary) {
                     echo "<img src='uploads/$secondary' alt='Gambar tambahan'>";
                 }
@@ -157,14 +148,14 @@ body {
         ?>
     </div>
 
-    <!-- Artikel Terkini -->
+    <!-- Sidebar Terkini -->
     <div class="sidebar">
         <h3>Artikel Terkini</h3>
         <ul>
             <?php while ($row = $latest->fetch_assoc()): ?>
                 <li>
-                    <a href="view_article.php?id=<?php echo $row['id']; ?>">
-                        <?php echo htmlspecialchars($row['title']); ?>
+                    <a href="view_article.php?id=<?= $row['id']; ?>">
+                        <?= htmlspecialchars($row['title']); ?>
                     </a>
                 </li>
             <?php endwhile; ?>
