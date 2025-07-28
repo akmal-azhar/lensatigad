@@ -1,7 +1,45 @@
 <?php
 session_start();
 require 'includes/db.php';
-$allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC");
+
+// Bilangan video per halaman
+$videosPerPage = 9;
+
+// Ambil nombor halaman sekarang dari URL
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+
+// Kiraan permulaan data
+$offset = ($page - 1) * $videosPerPage;
+
+// Fetch kategori dipilih dari URL (jika ada)
+$selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
+
+// Senarai kategori tetap
+$categories = ['Sports', 'Business', 'Education', 'Infotainment'];
+
+// SQL asas dan kira jumlah data
+if (!empty($selectedCategory)) {
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM videos WHERE category = ?");
+    $stmt->bind_param("s", $selectedCategory);
+    $stmt->execute();
+    $stmt->bind_result($totalVideos);
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $conn->prepare("SELECT * FROM videos WHERE category = ? ORDER BY created_at DESC LIMIT ?, ?");
+    $stmt->bind_param("sii", $selectedCategory, $offset, $videosPerPage);
+    $stmt->execute();
+    $allVideos = $stmt->get_result();
+} else {
+    $result = $conn->query("SELECT COUNT(*) as total FROM videos");
+    $totalVideos = $result->fetch_assoc()['total'];
+
+    $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT $offset, $videosPerPage");
+}
+
+// Jumlah halaman
+$totalPages = ceil($totalVideos / $videosPerPage);
 ?>
 
 <?php include 'includes/header.php'; ?>
@@ -13,11 +51,8 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC");
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Semua Episod - Lensa TigaD</title>
 
-  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- AOS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
@@ -37,6 +72,11 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC");
       color: #4a69bd;
       text-align: center;
       margin-bottom: 40px;
+    }
+
+    .filter-form {
+      max-width: 300px;
+      margin: 0 auto 40px auto;
     }
 
     .episode-grid {
@@ -82,13 +122,41 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC");
       font-size: 14px;
       color: #6c757d;
     }
+
+    .pagination {
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .pagination .page-link {
+      color: #4a69bd;
+    }
+
+    .pagination .active .page-link {
+      background-color: #4a69bd;
+      color: white;
+      border-color: #4a69bd;
+    }
   </style>
 </head>
 
 <body>
   <div class="container episode-container">
-    <h2><i class="bi bi-play-btn-fill"></i> Semua Episod Podcast</h2>
+    <h2><i class="bi bi-play-btn-fill"></i> All Podcast Episodes</h2>
 
+    <!-- Dropdown filter -->
+    <form method="GET" class="filter-form mb-4">
+      <select name="category" class="form-select" onchange="this.form.submit()">
+        <option value="">All Category</option>
+        <?php foreach ($categories as $cat): ?>
+          <option value="<?= $cat ?>" <?= ($selectedCategory == $cat) ? 'selected' : '' ?>>
+            <?= $cat ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
+    </form>
+
+    <!-- Video grid -->
     <div class="episode-grid">
       <?php $i = 0; ?>
       <?php while ($video = $allVideos->fetch_assoc()): ?>
@@ -99,12 +167,31 @@ $allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC");
         </div>
         <?php $i++; ?>
       <?php endwhile; ?>
+
+      <?php if ($i === 0): ?>
+        <p class="text-center text-muted">No videos found in this category.</p>
+      <?php endif; ?>
     </div>
+
+    <!-- Pagination -->
+    <?php if ($totalPages > 1): ?>
+      <nav>
+        <ul class="pagination mt-5">
+          <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+            <li class="page-item <?= ($page == $p) ? 'active' : '' ?>">
+              <a class="page-link"
+                 href="?page=<?= $p ?><?= !empty($selectedCategory) ? '&category=' . urlencode($selectedCategory) : '' ?>">
+                <?= $p ?>
+              </a>
+            </li>
+          <?php endfor; ?>
+        </ul>
+      </nav>
+    <?php endif; ?>
   </div>
 
   <?php include 'includes/footer.php'; ?>
 
-  <!-- AOS Script -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({

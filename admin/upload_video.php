@@ -6,9 +6,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'];
     $description = $_POST['description'];
     $youtube_link = $_POST['youtube_link'];
+    $category = $_POST['category'];
+    $created_at = date('Y-m-d H:i:s'); // Guna masa sekarang
 
-    $stmt = $conn->prepare("INSERT INTO videos (title, description, youtube_link) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $title, $description, $youtube_link);
+    // Prepare statement dengan 5 parameter
+    $stmt = $conn->prepare("INSERT INTO videos (title, description, youtube_link, category, created_at) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $title, $description, $youtube_link, $category, $created_at);
 
     if ($stmt->execute()) {
         $_SESSION['upload_success'] = "Video berjaya dimuat naik";

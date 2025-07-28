@@ -118,6 +118,16 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
               <input type="text" class="form-control" id="title" name="title" placeholder="Contoh: Podcast Episod 1" required>
             </div>
 
+            <label for="category">Category</label>
+              <select name="category" id="category" class="form-control" required>
+                <option value="">-- Select Category --</option>
+                <option value="sports">Sports</option>
+                <option value="business">Business</option>
+                <option value="education">Education</option>
+                <option value="infotainment">Infotainment</option>
+              </select>
+
+            <br>
             <div class="mb-3">
               <label for="description" class="form-label">Deskripsi Video</label>
               <textarea class="form-control" id="description" name="description" rows="4" placeholder="Ringkasan atau penerangan..." required></textarea>

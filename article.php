@@ -32,35 +32,12 @@
       color: #333;
     }
 
-    .article-card {
-      display: flex;
-      gap: 18px;
-      margin-bottom: 30px;
-      background: #ffffff;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
-      align-items: flex-start;
-      transition: transform 0.2s;
-    }
-
-    .article-card:hover {
-      transform: translateY(-4px);
-    }
-
     .article-thumbnail {
-      width: 280px;
-      height: 180px;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      object-position: center;
-      background-color: #fff;
-      flex-shrink: 0;
-      border-right: 1px solid #eee;
-    }
-
-    .article-body {
-      padding: 15px 20px 15px 0;
-      flex: 1;
+      border-radius: 8px;
+      max-height: 230px;
     }
 
     .card-title {
@@ -146,14 +123,18 @@
         if (strlen($row['content']) > 200) $preview .= '...';
         $img = !empty($row['thumbnail']) ? 'uploads/' . $row['thumbnail'] : 'images/default-thumbnail.jpg';
 
-        echo '<div class="article-card" data-aos="fade-up" data-aos-delay="' . ($i * 100) . '" data-aos-once="false">';
-        echo '<img src="' . htmlspecialchars($img) . '" class="article-thumbnail" alt="Thumbnail">';
-        echo '<div class="article-body">';
-        echo '<div class="card-title">' . htmlspecialchars($row['title']) . '</div>';
-        echo '<div class="card-text">' . nl2br(htmlspecialchars($preview)) . '</div>';
-        echo '<div class="publish-date">📅 ' . date("d M Y, h:i A", strtotime($row['created_at'])) . '</div>';
-        echo '<a href="view_article.php?id=' . $row['id'] . '" class="btn btn-sm btn-primary mt-2">Read More</a>';
-        echo '</div>';
+        echo '<div class="card mb-4 shadow-sm border-0" data-aos="fade-up" data-aos-delay="' . ($i * 100) . '" data-aos-once="false">';
+        echo '  <div class="row g-0">';
+        echo '    <div class="col-md-5">';
+        echo '      <img src="' . htmlspecialchars($img) . '" class="article-thumbnail img-fluid" alt="Thumbnail">';
+        echo '    </div>';
+        echo '    <div class="col-md-7 p-3">';
+        echo '      <div class="card-title">' . htmlspecialchars($row['title']) . '</div>';
+        echo '      <div class="card-text">' . nl2br(htmlspecialchars($preview)) . '</div>';
+        echo '      <div class="publish-date">📅 ' . date("d M Y, h:i A", strtotime($row['created_at'])) . '</div>';
+        echo '      <a href="view_article.php?id=' . $row['id'] . '" class="btn btn-sm btn-primary mt-2">Read More</a>';
+        echo '    </div>';
+        echo '  </div>';
         echo '</div>';
         $i++;
       }
@@ -172,7 +153,7 @@
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
   AOS.init({
-    once: false, // allow repeat on scroll
+    once: false,
     duration: 600,
     easing: 'ease-in-out',
   });
