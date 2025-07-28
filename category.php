@@ -121,12 +121,12 @@ h2.section-title {
                     <div class="article-title"><?= htmlspecialchars($row['title']) ?></div>
                     <div class="article-meta">📅 <?= date('d M Y', strtotime($row['created_at'])) ?></div>
                     <div class="article-snippet"><?= substr(strip_tags($row['content']), 0, 250) ?>...</div>
-                    <a href="view_article.php?id=<?= $row['id'] ?>" class="btn-read">Baca Selanjutnya</a>
+                    <a href="view_article.php?id=<?= $row['id'] ?>" class="btn-read">Read More</a>
                 </div>
             </div>
         <?php endwhile; ?>
     <?php else: ?>
-        <p class="text-muted">Tiada artikel dalam kategori ini buat masa sekarang.</p>
+        <p class="text-muted">There are currently no articles in this category.</p>
     <?php endif; ?>
 </div>
 

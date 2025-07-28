@@ -73,9 +73,9 @@
 <body>
 
 <section class="about-section">
-  <h2>📺 Apa itu Lensa TigaD?</h2>
+  <h2>📺 What is Lensa TigaD?</h2>
   <p>
-    <strong>Lensa TigaD</strong> ialah platform video digital yang membawa kandungan menarik merangkumi dunia <strong>podcast</strong>, <strong>infotainment</strong>, <strong>sukan</strong>, <strong>hiburan</strong> dan banyak lagi. Kami komited untuk menyediakan maklumat yang bermanfaat dan menghiburkan dalam bentuk visual moden yang mudah diakses oleh semua lapisan masyarakat.
+    <strong>Lensa TigaD</strong> is a digital video platform that delivers engaging content covering the world of <strong>podcast</strong>, <strong>sports</strong>, <strong>business</strong>, <strong>education</strong> and <strong>infotainment</strong>. We are committed to providing informative and entertaining content in a modern visual format that is easily accessible to people from all walks of life.
   </p>
   <img src="images/color logo.png" alt="Lensa TigaD Banner">
 </section>

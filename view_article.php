@@ -82,7 +82,6 @@ body {
     line-height: 1.6;
     margin-bottom: 20px;
 }
-
 .sidebar {
     width: 30%;
     background: #fff;
@@ -90,7 +89,6 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.08);
 }
-
 .sidebar h3 {
     margin-top: 0;
     font-size: 1.3em;
@@ -116,6 +114,31 @@ body {
 .sidebar ul li a:hover {
     color: #003366;
 }
+
+/* --- Responsive untuk mobile --- */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 0 10px;
+    }
+
+    .article-main, .sidebar {
+        width: 100%;
+    }
+
+    .article-main img, .sidebar img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .article-main h2 {
+        font-size: 1.5em;
+    }
+
+    .sidebar {
+        margin-top: 20px;
+    }
+}
 </style>
 
 <div class="container">
@@ -123,8 +146,8 @@ body {
     <div class="article-main">
         <h2><?= htmlspecialchars($article['title']); ?></h2>
         <div class="article-meta">
-            Kategori: <?= htmlspecialchars($article['category']); ?> |
-            Tarikh: <?= date("d M Y, h:i A", strtotime($article['created_at'])); ?>
+            Category: <?= htmlspecialchars($article['category']); ?> |
+            Date: <?= date("d M Y, h:i A", strtotime($article['created_at'])); ?>
         </div>
 
         <?php if ($primary): ?>
@@ -150,7 +173,7 @@ body {
 
     <!-- Sidebar Terkini -->
     <div class="sidebar">
-        <h3>Artikel Terkini</h3>
+        <h3>Latest Articles</h3>
         <ul>
             <?php while ($row = $latest->fetch_assoc()): ?>
                 <li>
