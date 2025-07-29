@@ -1,183 +1,124 @@
 <?php
-session_start();
-require 'includes/db.php';
+include 'includes/header.php';
+include 'includes/db.php';
 
-// Ambil 3 video lain selepas yang latest tadi
-$allVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3");
+// Fetch latest videos
+$latestVideos = $conn->query("SELECT * FROM videos ORDER BY created_at DESC LIMIT 3");
+
+// Fetch latest articles
+$latestArticles = $conn->query("SELECT * FROM articles ORDER BY created_at DESC LIMIT 3");
 ?>
-<?php include 'includes/header.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lensa TigaD - Home</title>
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- AOS CSS -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      line-height: 1.6;
-      background-color: #ffffff;
-      color: #111;
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
     }
-
-    .hero {
+    .welcome-section {
       background: linear-gradient(to right, #e3f2fd, #bbdefb);
       color: #0d47a1;
-      padding: 100px 20px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      min-height: 300px;
-    }
-
-    .banner {
-      background-color: #f1f9ff;
-      padding: 40px 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-    }
-
-    .banner div {
-      background: #ffffff;
-      color: #111;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-width: 280px;
       text-align: center;
-    }
-
-    .intro {
       padding: 60px 20px;
+    }
+    .welcome-section h1 {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+    .section-heading {
       text-align: center;
-      background: #e3f2fd;
-      color: #111;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 60px 0 30px;
     }
-
-    .video-section {
-      padding: 50px 20px;
-      background: #ffffff;
+    .card-title {
+      font-weight: 600;
     }
-
-    .video-box {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 20px;
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-      margin-bottom: 25px;
+    .card-text {
+      color: #555;
     }
-
-    .video-box iframe {
-      width: 300px;
-      height: 170px;
-      border-radius: 8px;
-      border: none;
-    }
-
-    .video-box .description h4 a {
-      color: #0d6efd;
-      text-decoration: none;
-    }
-
-    .video-box .description h4 a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 768px) {
-      .hero {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .banner {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .video-box {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .video-box iframe {
-        width: 100%;
-        height: 200px;
-      }
+    .view-all-btn {
+      text-align: center;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <!-- HERO -->
-  <div class="hero" data-aos="fade-left">
-    <div class="hero-text">
-      <h1 class="display-5 fw-bold">Welcome to Lensa TigaD 🎥</h1>
-      <p class="lead">Your trusted platform for Sports, Business, Education, and Infotainment — discover knowledge, ideas, and experience it all in one place.</p>
-    </div>
-  </div>
+<!-- Welcome Section -->
+<section class="welcome-section" data-aos="fade-down">
+  <h1>Welcome to Lensa TigaD</h1>
+  <p class="mt-3 fs-5">Discover insightful podcasts and articles on Sports, Business, Education & Infotainment.</p>
+</section>
 
-  <!-- BANNER SECTION -->
-  <div class="banner">
-    <div data-aos="fade-up" data-aos-delay="100">
-      <h4 class="text-primary fw-semibold">Sports</h4>
-      <p>Engaging local & global sports highlights, analysis, and updates for all fans.</p>
-    </div>
-    <div data-aos="fade-up" data-aos-delay="200">
-      <h4 class="text-primary fw-semibold">Business</h4>
-      <p>Market trends, financial tips, and expert insights to sharpen your entrepreneurial mind.</p>
-    </div>
-    <div data-aos="fade-up" data-aos-delay="300">
-      <h4 class="text-primary fw-semibold">Education</h4>
-      <p>Educational content across various fields to boost your knowledge and growth.</p>
-    </div>
-    <div data-aos="fade-up" data-aos-delay="400">
-      <h4 class="text-primary fw-semibold">Infotainment</h4>
-      <p>Fun and informative shows, podcasts, and more to keep you connected & entertained.</p>
-    </div>
-  </div>
-
-  <!-- INTRO -->
-  <div class="intro" data-aos="fade-up">
-    <h2 class="fw-bold text-primary">What is Lensa TigaD?</h2>
-    <p class="mt-3">Lensa TigaD is a platform where videos and podcast episodes from various topics are showcased. Join our growing community and explore informative, inspiring, and entertaining content made just for you.</p>
-  </div>
-
-  <!-- LATEST VIDEOS -->
-  <div class="video-section container">
-    <h2 class="mb-4 text-center fw-bold text-primary" data-aos="fade-up">🎬 3 Latest Videos</h2>
-    <?php while ($video = $allVideos->fetch_assoc()): ?>
-      <div class="video-box" data-aos="fade-up">
-        <iframe src="<?= htmlspecialchars($video['youtube_link']) ?>" allowfullscreen></iframe>
-        <div class="description">
-          <h4><a href="video.php?id=<?= $video['id'] ?>"><?= htmlspecialchars($video['title']) ?></a></h4>
-          <p><?= htmlspecialchars($video['description']) ?></p>
+<!-- Latest Videos Section -->
+<div class="container my-5">
+  <h2 class="section-heading" data-aos="fade-up">
+    <i class="bi bi-play-circle-fill me-2"></i> Latest Videos
+  </h2>
+  <div class="row">
+    <?php while ($video = $latestVideos->fetch_assoc()): ?>
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="card h-100 shadow-sm">
+          <div class="ratio ratio-16x9">
+            <iframe src="<?= htmlspecialchars($video['youtube_link']) ?>" title="Video" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><?= htmlspecialchars($video['title']) ?></h5>
+            <p class="card-text"><?= htmlspecialchars(substr($video['description'], 0, 100)) ?>...</p>
+            <a href="video.php?id=<?= $video['id'] ?>" class="btn btn-sm btn-outline-primary">Watch</a>
+          </div>
         </div>
       </div>
     <?php endwhile; ?>
   </div>
+  <div class="view-all-btn" data-aos="fade-up">
+    <a href="episode.php" class="btn btn-primary btn-sm"><i class="bi bi-collection-play"></i> View All Videos</a>
+  </div>
+</div>
 
-  <?php include 'includes/footer.php'; ?>
+<!-- Latest Articles Section -->
+<div class="container my-5">
+  <h2 class="section-heading" data-aos="fade-up">
+    <i class="bi bi-file-earmark-text-fill me-2"></i> Latest Articles
+  </h2>
+  <div class="row">
+    <?php while ($article = $latestArticles->fetch_assoc()): ?>
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="card h-100 shadow-sm">
+          <img src="uploads/<?= htmlspecialchars($article['thumbnail']) ?>" class="card-img-top" alt="Thumbnail">
+          <div class="card-body">
+            <h5 class="card-title text-primary"><?= htmlspecialchars($article['title']) ?></h5>
+            <p class="card-text"><?= htmlspecialchars(substr($article['content'], 0, 120)) ?>...</p>
+            <a href="view_article.php?id=<?= $article['id'] ?>" class="btn btn-sm btn-outline-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+    <?php endwhile; ?>
+  </div>
+  <div class="view-all-btn" data-aos="fade-up">
+    <a href="article.php" class="btn btn-primary btn-sm"><i class="bi bi-journal-text"></i> View All Articles</a>
+  </div>
+</div>
 
-  <!-- AOS JS -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init({
-      duration: 1000,
-      once: false
-    });
-  </script>
+<?php include 'includes/footer.php'; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 800,
+    once: true,
+  });
+</script>
 </body>
 </html>

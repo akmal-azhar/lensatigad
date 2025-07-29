@@ -157,7 +157,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client') {
 
 <div class="video-container">
     <h2><?php echo htmlspecialchars($video['title']); ?></h2>
-    <p class="description"><?php echo htmlspecialchars($video['description']); ?></p>
+
 <iframe width="100%" height="400" 
         src="<?php echo htmlspecialchars($video['youtube_link']); ?>" 
         title="YouTube video player"
@@ -166,9 +166,11 @@ if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client') {
         allowfullscreen>
 </iframe>
 
+    <p class="description"><?php echo htmlspecialchars($video['description']); ?></p>
+
     <hr>
 
-    <h3>Komen:</h3>
+    <h3>Comment:</h3>
     <?php while ($row = $comments->fetch_assoc()): ?>
         <div class="comment">
             <p>
@@ -214,15 +216,15 @@ if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client') {
 
     <?php if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client'): ?>
         <div class="comment-form">
-            <h4>Tinggalkan komen:</h4>
+            <h4>Leave a comment:</h4>
             <form action="add_comment.php" method="post">
                 <textarea name="comment" rows="3" placeholder="Tulis komen anda..." required></textarea><br>
                 <input type="hidden" name="video_id" value="<?php echo $video_id; ?>">
-                <button type="submit">Hantar</button>
+                <button type="submit">Send</button>
             </form>
         </div>
     <?php else: ?>
-        <p><em>Sila log masuk sebagai client untuk komen.</em></p>
+        <p><em>Please log in as a client to comment.</em></p>
     <?php endif; ?>
 </div>
 <script>

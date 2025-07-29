@@ -1,85 +1,163 @@
+<?php
+session_start();
+require 'includes/db.php';
+?>
 <?php include 'includes/header.php'; ?>
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tentang Kami - Lensa TigaD</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us - Lensa TigaD</title>
+
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f9f9f9;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+      color: #111;
     }
 
-    .about-section {
-      max-width: 1000px;
-      margin: 50px auto;
-      padding: 30px;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    .hero {
+      background: linear-gradient(to right, #e3f2fd, #bbdefb);
+      color: #0d47a1;
+      padding: 100px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-align: center;
     }
 
-    .about-section h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 20px;
+    .section {
+      padding: 60px 20px;
     }
 
-    .about-section p {
-      font-size: 1.1rem;
-      color: #444;
-      line-height: 1.7;
+    .icon-section {
+      background-color: #f0f8ff;
+      padding: 60px 20px;
     }
 
-    .about-section img {
-      margin-top: 30px;
-      max-width: 500px;
-      width: 100%;
-      height: auto;
+    .icon-box {
+      text-align: center;
+      padding: 30px;
+      background: #ffffff;
       border-radius: 12px;
-      border: 2px solid #eee;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .icon-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .icon-box i {
+      font-size: 40px;
+      color: #0d6efd;
+      margin-bottom: 15px;
+    }
+
+    .extra-section {
+      background: #f9f9f9;
+      padding: 60px 20px;
+      text-align: center;
     }
 
     @media (max-width: 768px) {
-      .about-section {
-        padding: 20px;
-        margin: 30px 15px;
+      .hero {
+        flex-direction: column;
+        padding: 60px 20px;
       }
     }
-    @keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  }
-
-  .about-section {
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.2s;
-  }
-
   </style>
 </head>
 <body>
 
-<section class="about-section">
-  <h2>📺 What is Lensa TigaD?</h2>
-  <p>
-    <strong>Lensa TigaD</strong> is a digital video platform that delivers engaging content covering the world of <strong>podcast</strong>, <strong>sports</strong>, <strong>business</strong>, <strong>education</strong> and <strong>infotainment</strong>. We are committed to providing informative and entertaining content in a modern visual format that is easily accessible to people from all walks of life.
-  </p>
-  <img src="images/color logo.png" alt="Lensa TigaD Banner">
-</section>
+  <!-- HERO SECTION -->
+  <div class="hero" data-aos="fade-down">
+    <div>
+      <h1 class="display-5 fw-bold">About Lensa TigaD</h1>
+      <p class="lead mt-3">Watch. Listen. Read. All in one platform.</p>
+    </div>
+  </div>
 
-<?php include 'includes/footer.php'; ?>
+  <!-- ABOUT INFO SECTION -->
+  <div class="section container" data-aos="fade-up">
+    <h2 class="fw-bold text-primary text-center mb-4">Who Are We?</h2>
+    <p class="text-center mx-auto" style="max-width: 800px;">
+      <strong>Lensa TigaD</strong> is a digital media platform that combines <strong>podcasts and articles</strong> focusing on four main topics: <strong>Sports, Business, Education, and Infotainment</strong>.
+      We deliver knowledge, insights, and entertainment in audio-visual and written formats — all easily accessible by everyone.
+    </p>
+    <p class="text-center mx-auto mt-3" style="max-width: 800px;">
+      Whether you’re a sports fan, aspiring entrepreneur, curious learner, or someone looking for meaningful content, Lensa TigaD has something for you.
+    </p>
+    <p class="text-center mx-auto mt-3 fw-semibold" style="max-width: 800px;">
+      Join our community and experience a 3-dimensional approach to content — <em>watch, listen, and read</em> in one place.
+    </p>
+  </div>
+
+  <!-- ICON TOPIC SECTION -->
+  <div class="icon-section">
+    <div class="container">
+      <h3 class="fw-bold text-primary text-center mb-5" data-aos="fade-up">Our Main Topics</h3>
+      <div class="row g-4">
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+          <div class="icon-box">
+            <i class="bi bi-trophy"></i>
+            <h5 class="fw-semibold text-primary">Sports</h5>
+            <p>Match reviews, sports news, and inspirational athlete stories.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+          <div class="icon-box">
+            <i class="bi bi-bar-chart-line"></i>
+            <h5 class="fw-semibold text-primary">Business</h5>
+            <p>Entrepreneurship insights, finance tips, and business strategies.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+          <div class="icon-box">
+            <i class="bi bi-book"></i>
+            <h5 class="fw-semibold text-primary">Education</h5>
+            <p>Learning guides and educational content for students and beyond.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+          <div class="icon-box">
+            <i class="bi bi-camera-reels"></i>
+            <h5 class="fw-semibold text-primary">Infotainment</h5>
+            <p>Entertaining and informative podcasts, social discussions, and more.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXTRA SECTION (CTA) -->
+  <div class="extra-section" data-aos="fade-up">
+    <div class="container">
+      <h3 class="fw-bold text-primary mb-3">Be Part of Our Community!</h3>
+      <p class="lead">Create your account today to access all our exciting videos, podcasts & articles.</p>
+      <a href="register.php" class="btn btn-primary mt-3 px-4">Join Now</a>
+    </div>
+  </div>
+
+  <?php include 'includes/footer.php'; ?>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: false
+    });
+  </script>
 </body>
 </html>
