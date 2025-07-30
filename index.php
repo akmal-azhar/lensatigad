@@ -28,7 +28,7 @@ $latestArticles = $conn->query("SELECT * FROM articles ORDER BY created_at DESC 
       background: linear-gradient(to right, #e3f2fd, #bbdefb);
       color: #0d47a1;
       text-align: center;
-      padding: 60px 20px;
+      padding: 190px 20px;
     }
     .welcome-section h1 {
       font-size: 3rem;
@@ -57,7 +57,7 @@ $latestArticles = $conn->query("SELECT * FROM articles ORDER BY created_at DESC 
 <!-- Welcome Section -->
 <section class="welcome-section" data-aos="fade-down">
   <h1>Welcome to Lensa TigaD</h1>
-  <p class="mt-3 fs-5">Discover insightful podcasts and articles on Sports, Business, Education & Infotainment.</p>
+  <p class="mt-3 fs-5 text-center mx-auto" style="max-width:700px;">Stay informed and entertained as we bring you engaging discussions, expert opinions, and real-life stories that matter—covering everything from the latest in sports to the trends shaping business, education, and infotainment today.</p>
 </section>
 
 <!-- Latest Videos Section -->

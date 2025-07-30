@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <div class="register-box">
-    <h3><i class="bi bi-person-plus-fill"></i> Sign Up as Client</h3>
+    <h3><i class="bi bi-person-plus-fill"></i> Sign Up as User</h3>
 
     <?php if (!empty($errors)): ?>
         <div class="alert alert-danger">

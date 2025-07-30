@@ -67,6 +67,7 @@ if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client') {
 }
 
 ?>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 
 <style>
@@ -190,28 +191,42 @@ if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client') {
 
     <hr>
 
-    <p>
-        👍 Like: <span id="like-count"><?php echo $like_count; ?></span> &nbsp;&nbsp;
-        👎 Dislike: <span id="dislike-count"><?php echo $dislike_count; ?></span>
-    </p>
+    <div class="d-flex align-items-center gap-4 mb-3">
+        <div>
+            <i class="bi bi-hand-thumbs-up-fill text-primary"></i> 
+            <span id="like-count"><?php echo $like_count; ?></span>
+        </div>
+        <div>
+            <i class="bi bi-hand-thumbs-down-fill text-danger"></i> 
+            <span id="dislike-count"><?php echo $dislike_count; ?></span>
+        </div>
+        <div>
+            <button class="btn btn-outline-secondary btn-sm" onclick="shareVideo()">
+                <i class="bi bi-share-fill"></i> Share
+            </button>
+        </div>
+    </div>
 
     <?php if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client'): ?>
-        <button 
-            id="like-button" 
-            data-liked="<?php echo $userLiked ? '1' : '0'; ?>" 
-            style="background-color: transparent; border: none; cursor: pointer; color: #4a90e2; font-size: 16px;"
-        >
-            👍 <?php echo $userLiked ? 'Unlike' : 'Like'; ?>
-        </button>
+        <div class="d-flex gap-2 mb-4">
+            <button 
+                id="like-button" 
+                class="btn btn-sm <?php echo $userLiked ? 'btn-primary' : 'btn-outline-primary'; ?>"
+                data-liked="<?php echo $userLiked ? '1' : '0'; ?>"
+            >
+                <i class="bi bi-hand-thumbs-up"></i> <?php echo $userLiked ? 'Unlike' : 'Like'; ?>
+            </button>
 
-        <button 
-            id="dislike-button" 
-            data-disliked="<?php echo $userDisliked ? '1' : '0'; ?>" 
-            style="background-color: transparent; border: none; cursor: pointer; color: #e94e77; font-size: 16px;"
-        >
-            👎 <?php echo $userDisliked ? 'Undislike' : 'Dislike'; ?>
-        </button>
+            <button 
+                id="dislike-button" 
+                class="btn btn-sm <?php echo $userDisliked ? 'btn-danger' : 'btn-outline-danger'; ?>"
+                data-disliked="<?php echo $userDisliked ? '1' : '0'; ?>"
+            >
+                <i class="bi bi-hand-thumbs-down"></i> <?php echo $userDisliked ? 'Undislike' : 'Dislike'; ?>
+            </button>
+        </div>
     <?php endif; ?>
+
 
 
     <?php if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client'): ?>
@@ -224,10 +239,19 @@ if (isset($_SESSION['user']) && $_SESSION['user']['type'] === 'client') {
             </form>
         </div>
     <?php else: ?>
-        <p><em>Please log in as a client to comment.</em></p>
+        <p><em>Please log in to comment.</em></p>
     <?php endif; ?>
 </div>
 <script>
+    function shareVideo() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+        alert("Link copied to clipboard!");
+    }).catch(err => {
+        alert("Failed to copy link.");
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const videoId = <?php echo $video_id; ?>;
     const likeButton = document.getElementById('like-button');
@@ -269,6 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
 </script>
 
 <?php include 'includes/footer.php'; ?>

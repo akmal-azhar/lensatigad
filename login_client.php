@@ -85,6 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #3b54a0;
         }
 
+        .btn-outline-secondary {
+            padding: 8px 15px;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+
         .link-register {
             text-align: center;
             margin-top: 15px;
@@ -150,6 +156,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <button type="submit" class="btn btn-primary"><i class="bi bi-box-arrow-in-right"></i> Log In</button>
+
+        <div class="mt-3 text-center">
+            <a href="index.php" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Back to Home
+            </a>
+        </div>
     </form>
 
     <div class="link-register">
